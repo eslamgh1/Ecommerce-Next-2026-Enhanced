@@ -84,7 +84,8 @@ export const nextAuthOptions: NextAuthOptions = {
         // data at client
         // session(params) run after successfull login
         //3=ways to get user session: 1-useSession 2-getServerSession 3-api/auth/session
-        async session({ session, token }: { session: any; token: any }) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        async session({ session, token }: any) {
             // console.log("session params ", token)
 
             if (token && token.userId) {
