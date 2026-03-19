@@ -138,14 +138,6 @@ export default function LoginForm() {
                                 )}
                             />
 
-                            <div className='flex items-center justify-between text-sm'>
-                                <label className='flex items-center gap-2 text-gray-600 hover:text-gray-800 cursor-pointer'>
-                                    <input type='checkbox' className='rounded border-gray-300 text-blue-600 focus:ring-blue-500' />
-                                    Remember me
-                                </label>
-                                <a href='#' className='text-blue-600 hover:text-blue-700 font-medium'>Forgot password?</a>
-                            </div>
-
                             <Button 
                                 type="submit" 
                                 disabled={isLoading}

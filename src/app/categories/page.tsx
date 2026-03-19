@@ -16,7 +16,7 @@ export default function Categories() {
                         Shop by <span className="text-transparent bg-clip-text bg-linear-to-br from-blue-600 to-purple-600">Categories</span>
                     </h1>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Discover our wide range of products organized by categories. Find exactly what you're looking for with ease.
+                        Discover our wide range of products organized by categories. Find exactly what you&apos;re looking for with ease.
                     </p>
                 </div>
 
