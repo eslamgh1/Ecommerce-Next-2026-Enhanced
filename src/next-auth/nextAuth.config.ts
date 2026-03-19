@@ -1,15 +1,16 @@
-import { NextAuthOptions } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import { NextAuthOptions } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
 import { jwtDecode } from "jwt-decode"
-import { any } from "zod";
-import { th } from "zod/v4/locales";
+// import { compare } from "bcrypt"
+// import { getUserToken } from "./tokenActions"
+// import { getUserByEmail } from "../_services/auth.service"
 
-
-export const nextAuthConfig: NextAuthOptions = {
+export const nextAuthOptions: NextAuthOptions = {
+    secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development-change-in-production",
     providers: [
         //Credentials Provider is used to create custom login page  //google provider  //github provider
         //CredentialsProvider({})
-        Credentials({
+        CredentialsProvider({
             name: "Login Fresh Cart",
 
             // authorize is a Fn Login
@@ -83,7 +84,7 @@ export const nextAuthConfig: NextAuthOptions = {
         // data at client
         // session(params) run after successfull login
         //3=ways to get user session: 1-useSession 2-getServerSession 3-api/auth/session
-        async session({ session, token }: { session: any; token: any }) {
+        async session({ session, token }: any) {
             // console.log("session params ", token)
 
             if (token && token.userId) {

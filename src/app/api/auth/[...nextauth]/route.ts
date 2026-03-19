@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import NextAuth from "next-auth"
-import { nextAuthConfig } from "_/next-auth/nextAuth.config";
+import { nextAuthOptions } from "_/next-auth/nextAuth.config";
 
-
-
-const nextHandler = NextAuth(nextAuthConfig)
+const nextHandler = NextAuth(nextAuthOptions)
 
 export {nextHandler as  GET,  nextHandler as POST}
 
