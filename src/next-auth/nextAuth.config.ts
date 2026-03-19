@@ -83,14 +83,14 @@ export const nextAuthConfig: NextAuthOptions = {
         // data at client
         // session(params) run after successfull login
         //3=ways to get user session: 1-useSession 2-getServerSession 3-api/auth/session
-        async session({ token }: { token: any }) {
+        async session({ session, token }: { session: any; token: any }) {
             // console.log("session params ", token)
 
-            if (token) {
-                token.session.user.id = token.userId
+            if (token && token.userId) {
+                session.user.id = token.userId
             }
 
-            return token.session
+            return session
         }
 
     },
