@@ -1,4 +1,4 @@
-import MySwiper from "../MySwiper/page";
+import MySwiper from "../MySwiper/MySwiper";
 //slider images
 import img1 from "@images/slider-image-1.jpeg";
 import img2 from "@images/slider-image-2.jpeg";

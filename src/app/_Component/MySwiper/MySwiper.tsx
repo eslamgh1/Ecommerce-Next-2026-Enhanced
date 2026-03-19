@@ -9,13 +9,13 @@ import 'swiper/css/pagination';
 // Import required modules
 import { Autoplay, Pagination } from 'swiper/modules';
 
-export default function MySwiper(
-    { imageList, slidesPerView, spaceBetween }:
-        {
-            imageList: string[],
-            spaceBetween?: number,
-            slidesPerView?: number,
-        }) {
+interface MySwiperProps {
+    imageList: string[];
+    spaceBetween?: number;
+    slidesPerView?: number;
+}
+
+export default function MySwiper({ imageList, slidesPerView, spaceBetween }: MySwiperProps) {
     return (
         <Swiper
             spaceBetween={spaceBetween}

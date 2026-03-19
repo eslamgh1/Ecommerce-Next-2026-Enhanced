@@ -1,5 +1,5 @@
 import { getAllCategories } from "_/app/_services/categories.service"
-import MySwiper from "../MySwiper/page"
+import MySwiper from "../MySwiper/MySwiper"
 
 
 

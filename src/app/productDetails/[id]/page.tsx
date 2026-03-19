@@ -4,12 +4,13 @@ import { Button } from "_/components/ui/button";
 import React from "react";
 
 type ProductDetailsPropsType = {
-    params: {id: string};
+    params: Promise<{id: string}>;
 };
 
 export default async function ProductDetails({params} : ProductDetailsPropsType) {
 
-    const object = await getSpecificProduct(params.id);
+    const {id} = await params;
+    const object = await getSpecificProduct(id);
 
     if (!object){
         return;
