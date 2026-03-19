@@ -99,7 +99,7 @@ export default function Brands() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             {filteredBrands.map((brand) => (
               <Link 
-                key={brand.id} 
+                key={brand.id || brand.slug || brand.name} 
                 href="/"
                 className="group"
               >

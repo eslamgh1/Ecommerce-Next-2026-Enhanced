@@ -2,16 +2,20 @@
 import { toast } from "sonner";
 import { getUserToken } from "../utils/utils";
 import { revalidatePath } from "next/cache";
-import { count } from "console";
 
 // I Can use Axio "library-outside"
 export  async function addProductToCart(productId: string) {
-    console.log("Add to Cart clicked");
+    console.log("Add to Cart clicked for product:", productId);
 
     const token = await getUserToken()
     console.log({ token });
 
-    if (token) {
+    if (!token) {
+        console.error("No token found - user not authenticated");
+        return false;
+    }
+
+    try {
         const response = await fetch("https://ecommerce.routemisr.com/api/v1/cart", {
             method: "POST",
             body: JSON.stringify({ productId }),
@@ -19,19 +23,26 @@ export  async function addProductToCart(productId: string) {
                 "Content-Type": "application/json",
                 token: token as string
             },
-            cache: "force-cache"
+            cache: "no-store" // Changed from force-cache to no-store
         })
+        
+        console.log("API Response status:", response.status, response.statusText);
+        
         const finalRes = await response.json()
-  
+        console.log("API Response data:", finalRes);
 
         if(finalRes.status === "success") {
+            console.log("Product successfully added to cart");
             revalidatePath("/cart")
             return finalRes.numOfCartItems
-        }else{
+        } else {
+            console.error("API returned error:", finalRes);
             return false
         }
+    } catch (error) {
+        console.error("Network error adding to cart:", error);
+        return false;
     }
-
 }
 
 

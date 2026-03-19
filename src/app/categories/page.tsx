@@ -25,7 +25,7 @@ export default function Categories() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {allCategories.map((category) => (
                             <Link 
-                                key={category.id} 
+                                key={category.id || category.slug || category.name} 
                                 href="/"
                                 className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
                             >

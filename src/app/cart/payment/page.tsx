@@ -20,6 +20,8 @@ export default function Payment() {
 // we use useState to get the cartId
     const [cartId, setCartId] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [isCardPaymentLoading, setIsCardPaymentLoading] = useState(false)
+    const [isCashPaymentLoading, setIsCashPaymentLoading] = useState(false)
 
     // we use useEffect to get the cartId
     async function handleGetingUserCart() {
@@ -56,6 +58,7 @@ export default function Payment() {
             return
         }
 
+        setIsCashPaymentLoading(true)
         try {
             // call Api // server action
             const result = await createCashOrder(cartId, address)
@@ -73,6 +76,8 @@ export default function Payment() {
         } catch (error) {
             console.error("Failed to create order:", error)
             toast.error("Failed to create order")
+        } finally {
+            setIsCashPaymentLoading(false)
         }
     }
 
@@ -90,6 +95,7 @@ export default function Payment() {
             return
         }
 
+        setIsCardPaymentLoading(true)
         try {
             // call Api // server action
             const result = await makeCheckoutSession(cartId, address)
@@ -107,6 +113,8 @@ export default function Payment() {
         } catch (error) {
             console.error("Failed to Checkout session:", error)
             toast.error("Failed to Checkout session")
+        } finally {
+            setIsCardPaymentLoading(false)
         }
     }
 
@@ -148,16 +156,33 @@ export default function Payment() {
                     </form>
                 </CardContent>
                 <CardFooter className="flex-col gap-2">
-                    <Button  onClick={makeCardOrder} type="submit" className="w-full" disabled={isLoading}>
-                        {isLoading ? "Loading..." : "Make Card payment"}
+                    <Button 
+                        onClick={makeCardOrder} 
+                        type="submit" 
+                        className="w-full" 
+                        disabled={isCardPaymentLoading || isLoading || !cartId}
+                    >
+                        {isCardPaymentLoading ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Processing...
+                            </div>
+                        ) : (
+                            "Make Card payment"
+                        )}
                     </Button>
                     <Button 
                         onClick={makeCashOrder} 
                         variant="outline" 
                         className="w-full"
-                        disabled={isLoading || !cartId}
+                        disabled={isCashPaymentLoading || isLoading || !cartId}
                     >
-                        {isLoading ? "Loading..." : !cartId ? "No cart available" : "Make cash payment"}
+                        {isCashPaymentLoading ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                                Processing...
+                            </div>
+                        ) : !cartId ? "No cart available" : "Make cash payment"}
                     </Button>
                 </CardFooter>
             </Card>

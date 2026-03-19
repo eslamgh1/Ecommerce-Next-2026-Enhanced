@@ -4,6 +4,7 @@ import { Button } from "_/components/ui/button";
 import { useContext, useState } from "react";
 import { CartContext } from "_/app/cart/CartContext";
 import { addProductToCart } from "_/app/cart/cart.action";
+import { toast } from "sonner";
 
 export default function AddProductBtn({id}:{id:string}) {
 
@@ -11,7 +12,7 @@ export default function AddProductBtn({id}:{id:string}) {
     const [isLoading, setIsLoading] = useState(false)
 
     async function handleAddToCart() {
-        console.log("Add to Cart clicked");
+        console.log("Add to Cart clicked for product:", id);
         
         // Prevent multiple clicks while loading
         if (isLoading) return;
@@ -22,13 +23,16 @@ export default function AddProductBtn({id}:{id:string}) {
             const isSuccessfullyAdd = await addProductToCart(id); // server action ==> cart.action
 
             if (isSuccessfullyAdd) {
-                console.log("Product added to cart successfully");
+                console.log("Product added to cart successfully, new count:", isSuccessfullyAdd);
                 updateCartCount(isSuccessfullyAdd)
+                toast.success("Product added to cart!");
             } else {
-                console.error("Something wrong");
+                console.error("Failed to add product to cart");
+                toast.error("Failed to add product to cart. Please try again.");
             }
         } catch (error) {
             console.error("Error adding to cart:", error);
+            toast.error("An error occurred. Please check your connection and try again.");
         } finally {
             setIsLoading(false);
         }
