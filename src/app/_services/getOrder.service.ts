@@ -62,12 +62,35 @@ export type OrdersResponseType = {
     data: OrderType[];
 };
 
-// Get all orders for the logged-in user
+// Get all orders for logged-in user
 export async function getAllUserOrders(): Promise<OrderType[] | null> {
     const token = await getUserToken();
 
     try {
-        const response = await fetch("https://ecommerce.routemisr.com/api/v1/orders", {
+        // First get user data to extract userId from token
+        const userResponse = await fetch("https://ecommerce.routemisr.com/api/v1/auth/verifyToken", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                token: token as string
+            }
+        });
+
+        if (!userResponse.ok) {
+            console.error('Failed to verify user token');
+            return null;
+        }
+
+        const userData = await userResponse.json();
+        const userId = userData?.user?._id || userData?.user?.id;
+
+        if (!userId) {
+            console.error('Could not extract user ID from token');
+            return null;
+        }
+
+        // Now fetch orders for specific user
+        const response = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/user/${userId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
