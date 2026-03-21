@@ -28,6 +28,11 @@ export function ChangeCountBtn({ isIncrement = false, id, newCount }: { isIncrem
             } else {
                 console.log(`Count Changed to ${newCount}`);
                 updateCartCount(output)
+                
+                // Trigger cart refresh after successful change
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('cartUpdated'));
+                }
             }
         } catch (error) {
             console.error("Error changing count:", error);

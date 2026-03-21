@@ -66,6 +66,11 @@ export  async function removeItemFromCart(id: string) {
         // revalidatePath for update
         if(finalResDelete.status == 'success'){
             revalidatePath("/cart")
+            
+            // Dispatch custom event to notify cart page
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('cartUpdated'));
+            }
 
             return finalResDelete.numOfCartItems
         }else{
@@ -97,6 +102,11 @@ export  async function changeCount(id: string , count:number) {
         // revalidatePath for update
         if(finalResUpdate.status == 'success'){
             revalidatePath("/cart")
+            
+            // Dispatch custom event to notify cart page
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('cartUpdated'));
+            }
 
             return finalResUpdate.numOfCartItems
         }else{

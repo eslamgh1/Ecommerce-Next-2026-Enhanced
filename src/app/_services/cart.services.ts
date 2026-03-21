@@ -54,13 +54,22 @@ export async function getUserCart() : Promise<getUserCartType>{
         console.log("API Response structure:", {
             hasData: !!finalRes.data,
             topLevelKeys: Object.keys(finalRes),
-            dataKeys: finalRes.data ? Object.keys(finalRes.data) : []
+            dataKeys: finalRes.data ? Object.keys(finalRes.data) : [],
+            productsArray: finalRes.data?.products || [],
+            allProducts: finalRes.products || [],
+            finalResProducts: finalRes.products || finalRes.data?.products || []
         })
+
+        // Try multiple possible locations for products data
+        const products = finalRes.data?.products || 
+                        finalRes.products || 
+                        finalRes.products || 
+                        [];
 
         return {
             numOfCartItems: finalRes.numOfCartItems ?? 0,
-            products: finalRes.data?.products ?? [],
-            totalCartPrice: finalRes.data?.totalCartPrice ?? 0,
+            products: products,
+            totalCartPrice: finalRes.data?.totalCartPrice ?? finalRes.totalCartPrice ?? 0,
             cartId: finalRes.data?.cartId ?? finalRes.cartId ?? finalRes._id ?? ""
         };
 

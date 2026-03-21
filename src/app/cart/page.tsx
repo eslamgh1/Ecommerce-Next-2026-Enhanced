@@ -25,19 +25,46 @@ export default function CartPage() {
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    async function fetchCart() {
-      try {
-        const data = await getUserCart();
-        setCartData(data);
-      } catch (error) {
-        console.error("Error fetching cart:", error);
-      } finally {
-        setIsLoading(false);
-      }
+  async function fetchCart() {
+    try {
+      const data = await getUserCart();
+      setCartData(data);
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  useEffect(() => {
     fetchCart();
   }, []);
+
+  useEffect(() => {
+    const handleCartUpdate = () => {
+      console.log("Cart update detected, refreshing cart data...");
+      fetchCart();
+    };
+
+    window.addEventListener('cartUpdated', handleCartUpdate);
+    
+    return () => {
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+    };
+  }, [fetchCart]);
+
+  useEffect(() => {
+    console.log("Cart data updated:", {
+      numOfCartItems: cartData.numOfCartItems,
+      products: cartData.products.map(p => ({
+        id: p._id,
+        title: p.product.title,
+        count: p.count,
+        price: p.price
+      })),
+      totalCartPrice: cartData.totalCartPrice
+    });
+  }, [cartData]);
 
   const { numOfCartItems, products, totalCartPrice } = cartData;
 
@@ -137,10 +164,11 @@ export default function CartPage() {
                       <ChangeCountBtn isIncrement={true} id={item.product.id} newCount={item.count + 1} />
                       <Input
                         type="number"
-                        value={item.count} //item.count = The Current reality (what is in the database right now).
+                        value={item.count}
                         className="w-16 text-center"
                         readOnly
                       />
+                      <span className="text-xs text-gray-500 ml-2">(Updated: {item.count})</span>
                       <ChangeCountBtn id={item.product.id} newCount={item.count - 1} />
                       {/* 
                       <Button className="cursor-pointer" size="sm">-</Button> */}

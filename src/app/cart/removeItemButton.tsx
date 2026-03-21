@@ -23,6 +23,11 @@ export default function RemoveItemButton({id}: {id: string}) {
             }else{
                 console.log("Item removed from cart")
                 updateCartCount(output)
+                
+                // Trigger cart refresh after successful removal
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('cartUpdated'));
+                }
             }
         } catch (error) {
             console.error("Error removing item:", error);

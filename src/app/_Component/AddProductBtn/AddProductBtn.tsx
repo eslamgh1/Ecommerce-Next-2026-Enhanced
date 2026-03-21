@@ -25,6 +25,12 @@ export default function AddProductBtn({id}:{id:string}) {
             if (isSuccessfullyAdd) {
                 console.log("Product added to cart successfully, new count:", isSuccessfullyAdd);
                 updateCartCount(isSuccessfullyAdd)
+                
+                // Trigger cart refresh after successful addition
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('cartUpdated'));
+                }
+                
                 toast.success("Product added to cart!");
             } else {
                 console.error("Failed to add product to cart");
