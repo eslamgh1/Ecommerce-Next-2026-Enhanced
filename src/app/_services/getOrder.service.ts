@@ -67,8 +67,8 @@ export async function getAllUserOrders(): Promise<OrderType[] | null> {
     const token = await getUserToken();
 
     try {
-        // First get user data to extract userId from token
-        const userResponse = await fetch("https://ecommerce.routemisr.com/api/v1/auth/verifyToken", {
+        // Use NextAuth session to get user info instead of verifyToken
+        const sessionResponse = await fetch("https://ecommerce.routemisr.com/api/v1/auth/verifyToken", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -76,18 +76,27 @@ export async function getAllUserOrders(): Promise<OrderType[] | null> {
             }
         });
 
-        if (!userResponse.ok) {
+        if (!sessionResponse.ok) {
             console.error('Failed to verify user token');
             return null;
         }
 
-        const userData = await userResponse.json();
-        const userId = userData?.user?._id || userData?.user?.id;
+        const userData = await sessionResponse.json();
+        console.log("User data from session:", userData);
+        
+        // Try different possible user ID locations
+        const userId = userData?.user?._id || 
+                      userData?.user?.id || 
+                      userData?._id || 
+                      userData?.id ||
+                      userData?.decoded?.id;
 
         if (!userId) {
-            console.error('Could not extract user ID from token');
+            console.error('Could not extract user ID from token - userData:', userData);
             return null;
         }
+
+        console.log("Successfully extracted user ID:", userId);
 
         // Now fetch orders for specific user
         const response = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/user/${userId}`, {
@@ -119,14 +128,20 @@ export async function getAllUserOrders(): Promise<OrderType[] | null> {
             return null;
         }
 
-        // Success case - return the orders array
+        // Success case - handle different response structures
         console.log("Orders API Response structure:", {
             hasData: !!finalRes.data,
             isArray: Array.isArray(finalRes.data),
-            dataLength: finalRes.data?.length || 0
+            dataLength: finalRes.data?.length || 0,
+            isArrayDirectly: Array.isArray(finalRes),
+            directLength: finalRes?.length || 0
         });
 
-        return finalRes.data || [];
+        // API returns orders array directly, not wrapped in data property
+        const orders = finalRes.data || finalRes || [];
+        
+        console.log("Final orders array:", orders.length, "orders");
+        return orders;
 
     } catch (error) {
         console.error('Orders Service Error:', error);

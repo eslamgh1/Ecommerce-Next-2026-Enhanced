@@ -18,10 +18,15 @@ export default function AllOrders() {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
+                console.log("Fetching orders...");
                 const data = await getAllUserOrders()
+                console.log("Orders data received:", data);
                 if (data) {
+                    console.log("Setting orders:", data.length, "orders");
                     setOrders(data)
                     setFilteredOrders(data)
+                } else {
+                    console.log("No orders data received");
                 }
             } catch (error) {
                 console.error('Failed to fetch orders:', error)
