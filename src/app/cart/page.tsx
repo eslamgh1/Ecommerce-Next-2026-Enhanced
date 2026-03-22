@@ -158,25 +158,19 @@ export default function CartPage() {
                 {/* Quantity and Actions */}
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Qty:</span>
-                    <div className="flex gap-2 items-center">
-                      {/* <Button className="cursor-pointer" size="sm">+</Button> */}
+                    <span className="text-sm text-gray-600 font-medium whitespace-nowrap">Qty:</span>
+                    <div className="flex items-center gap-0 bg-gray-100 rounded-lg p-1 flex-1 min-w-0">
                       <ChangeCountBtn isIncrement={true} id={item.product.id} newCount={item.count + 1} />
-                      <Input
-                        type="number"
-                        value={item.count}
-                        className="w-16 text-center"
-                        readOnly
-                      />
-                      <span className="text-xs text-gray-500 ml-2">(Updated: {item.count})</span>
+                      <div className="w-12 text-center font-semibold text-gray-800 shrink-0">
+                        {item.count}
+                      </div>
                       <ChangeCountBtn id={item.product.id} newCount={item.count - 1} />
-                      {/* 
-                      <Button className="cursor-pointer" size="sm">-</Button> */}
                     </div>
                   </div>
-                  {/* <Button variant="destructive" className="cursor-pointer" size="sm">Remove</Button> */}
-                  <RemoveItemButton id={item.product.id} />
-
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">Updated: {item.count}</span>
+                    <RemoveItemButton id={item.product.id} />
+                  </div>
                 </div>
               </div>
             ))}
