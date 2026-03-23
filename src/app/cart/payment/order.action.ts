@@ -54,8 +54,13 @@ export async function makeCheckoutSession(cartId:string , shippingAddress: shipp
         return { statusMsg: 'fail', message: 'Authentication required' }
     }
 
+    // Get the base URL dynamically for development vs production
+    const baseUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://shophubstore-lime.vercel.app'
+        : 'http://localhost:3000';
+
     try {
-        const response = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:3000`, {
+        const response = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=${baseUrl}`, {
             method: "POST",
             body: JSON.stringify({ shippingAddress}), // stringfy the shippingAddress  to convert the shippingAddress to a string
             headers: {
